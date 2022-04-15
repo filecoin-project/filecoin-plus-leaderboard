@@ -74,7 +74,7 @@ apolloServer = new ApolloServer({
 });
 
 await apolloServer.start();
-const apolloMiddleware = apolloServer.getMiddleware({
+const createHandler = apolloServer.createHandler({
   path: '/api/graphql',
 });
 
@@ -88,5 +88,5 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await runMiddleware(req, res, apolloMiddleware);
+  await runMiddleware(req, res, createHandler);
 }
