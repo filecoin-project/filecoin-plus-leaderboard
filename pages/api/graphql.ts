@@ -40,62 +40,53 @@ const driver = neo4j.driver(
   neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD)
 );
 
-// export interface NextContext {
-//   req: NextApiRequest;
-//   res: NextApiResponse;
-// }
+export interface NextContext {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}
 
-// function runMiddleware(
-//   req: NextApiRequest,
-//   res: NextApiResponse,
-//   next: any
-// ): Promise<void> {
-//   return new Promise((resolve, reject) => {
-//     next(req, res, (result: any) => {
-//       if (result instanceof Error) {
-//         return reject(result);
-//       }
+function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next: any
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    next(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
 
-//       return resolve(result);
-//     });
-//   });
-// }
+      return resolve(result);
+    });
+  });
+}
 
-// await apolloServer.start()
-// const apolloMiddleware = apolloServer.getMiddleware({
-//   path: '/api/graphql',
-// })
+// Uncomment to create any indexes or constraints defined in GraphQL type definitions
+//await neoSchema.assertIndexesAndConstraints({ options: { create: true } });
+
+// cold start, need to create ApolloServer
+const neoSchema = new Neo4jGraphQL({ typeDefs, driver });
+const schema = await neoSchema.getSchema();
+apolloServer = new ApolloServer({
+  schema,
+  introspection: true,
+  plugins: [ApolloServerPluginLandingPageLocalDefault()],
+});
+
+await apolloServer.start();
+const apolloMiddleware = apolloServer.getMiddleware({
+  path: '/api/graphql',
+});
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (!apolloServer) {
-    // cold start, need to create ApolloServer
-    const neoSchema = new Neo4jGraphQL({ typeDefs, driver });
-    const schema = await neoSchema.getSchema();
-
-    // Uncomment to create any indexes or constraints defined in GraphQL type definitions
-    //await neoSchema.assertIndexesAndConstraints({ options: { create: true } });
-
-    apolloServer = new ApolloServer({
-      schema,
-      introspection: true,
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
-    });
-
-    startServer = apolloServer.start();
-  } else {
-    await startServer;
-    await apolloServer.createHandler({
-      path: '/api/graphql',
-    })(req, res);
-  }
+  await runMiddleware(req, res, apolloMiddleware);
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-    externalResolver: true,
-  },
-};
