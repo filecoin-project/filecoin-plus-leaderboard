@@ -3,6 +3,7 @@ import { gql, ApolloServer } from 'apollo-server-micro';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import neo4j from 'neo4j-driver';
 import { Neo4jGraphQL } from '@neo4j/graphql';
+import Cors from 'cors';
 
 // Declare here to handle cold start of serverless function
 let startServer: any;
@@ -78,6 +79,12 @@ const createHandler = apolloServer.createHandler({
   path: '/api/graphql',
 });
 
+// Initialize the cors middleware
+const cors = Cors({
+  // Only allow requests with GET, POST and OPTIONS
+  methods: ['GET', 'POST', 'OPTIONS'],
+});
+
 export const config = {
   api: {
     bodyParser: false,
@@ -88,5 +95,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await runMiddleware(req, res, cors);
   await runMiddleware(req, res, createHandler);
 }
