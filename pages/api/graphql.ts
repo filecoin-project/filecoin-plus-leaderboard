@@ -55,7 +55,7 @@ export default async function handler(
     apolloServer = new ApolloServer({
       schema,
       introspection: true,
-      // plugins: [ApolloServerPluginLandingPageLocalDefault],
+      plugins: [ApolloServerPluginLandingPageLocalDefault],
     });
 
     startServer = apolloServer.start();
