@@ -40,6 +40,32 @@ const driver = neo4j.driver(
   neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD)
 );
 
+// export interface NextContext {
+//   req: NextApiRequest;
+//   res: NextApiResponse;
+// }
+
+// function runMiddleware(
+//   req: NextApiRequest,
+//   res: NextApiResponse,
+//   next: any
+// ): Promise<void> {
+//   return new Promise((resolve, reject) => {
+//     next(req, res, (result: any) => {
+//       if (result instanceof Error) {
+//         return reject(result);
+//       }
+
+//       return resolve(result);
+//     });
+//   });
+// }
+
+// await apolloServer.start()
+// const apolloMiddleware = apolloServer.getMiddleware({
+//   path: '/api/graphql',
+// })
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -70,5 +96,6 @@ export default async function handler(
 export const config = {
   api: {
     bodyParser: false,
+    externalResolver: true,
   },
 };
