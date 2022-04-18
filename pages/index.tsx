@@ -1,6 +1,5 @@
 import type { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
-import { Layout, Row, Typography, Divider, Input, Select } from 'antd';
 import getVerifiersMock from '../mocks/getVerifiersMock';
 import _ from 'lodash';
 import moment from 'moment';
@@ -8,17 +7,19 @@ import { loadVerifiers } from '../lib/fetch-verifiers';
 import { loadVerifiersMoreInfo } from '../lib/fetch-verifiers-more-info';
 import { getAddressKeyById } from '../lib/getAddressKeyById';
 import { getAddressIdByKey } from '../lib/getAddressIdByKey';
-
 import {
-  CustomLayoutHeader,
-  CustomLayoutFooter,
-  NotaryCard,
-  NotaryTable,
-} from '../components';
-
-const { Content } = Layout;
-const { Title } = Typography;
-const { Option } = Select;
+  Frame,
+  TopBar,
+  Page,
+  Card,
+  Button,
+  Navigation,
+  Stack,
+  Layout,
+  TextStyle,
+  ResourceList,
+  ResourceItem,
+} from '@shopify/polaris';
 
 type Notary = {
   name: string;
@@ -110,71 +111,111 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
+const logo = {
+  width: 240,
+  // Provides a path for a logo used on a dark background
+  topBarSource: './filecoin-plus-leaderboard-logo.png',
+  // Provides a path for a logo used on a light background
+  contextualSaveBarSource: '',
+  url: '/',
+  accessibilityLabel: 'Filecoin Plus - Leaderboard',
+};
+
+const topBarMarkup = <TopBar />;
+
+const navigationMarkup = (
+  <Navigation location='/'>
+    <Navigation.Section
+      items={[
+        {
+          url: '/',
+          label: 'Home',
+          // icon: HomeMinor,
+        },
+      ]}
+    />
+  </Navigation>
+);
+
+const items = [
+  {
+    id: 106,
+    url: '#',
+    name: 'Mae Jemison',
+    location: 'Decatur, USA',
+  },
+  {
+    id: 206,
+    url: '#',
+    name: 'Ellen Ochoa',
+    location: 'Los Angeles, USA',
+  },
+];
+
 const App: NextPage = (
   pageProps: InferGetStaticPropsType<typeof getStaticProps>
 ) => {
-  // console.log(pageProps);
-
   return (
-    <div className='App'>
+    <>
       <Head>
         <title>Filecoin Plus - Leaderboard</title>
-        <meta name='description' content='Filecoin Plus - Leaderboard App' />
+        <meta name='description' content='Filecoin Plus - Leaderboard' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <Layout className='layout'>
-        <CustomLayoutHeader />
+      <Frame logo={logo} topBar={topBarMarkup} navigation={navigationMarkup}>
+        <Page fullWidth title='All notaries'>
+          <Layout>
+            {/* <Layout.Section fullWidth>
+              <ResourceList
+                resourceName={{ singular: 'notary', plural: 'notaries' }}
+                items={items}
+                renderItem={(item: any) => (
+                  <ResourceItem id={item.id} url={item.url}>
+                    <Layout.Section oneThird>
+                      <Card title="Danny O'Brien">
+                        <Card.Section>
+                          <h2>
+                            <TextStyle>Filecoin Foundation</TextStyle>
+                          </h2>
+                        </Card.Section>
+                        <Card.Section title='Summary'>
+                          <p>
+                            View a summary of your online store’s performance.
+                          </p>
+                        </Card.Section>
+                      </Card>
+                    </Layout.Section>
+                  </ResourceItem>
+                )}
+                sortOptions={[
+                  { label: 'Newest update', value: 'DATE_MODIFIED_DESC' },
+                  { label: 'Oldest update', value: 'DATE_MODIFIED_ASC' },
+                ]}
+              />
+            </Layout.Section> */}
+            {/* <Stack> */}
+            <Layout.Section oneThird>
+              <Card title="Danny O'Brien">
+                <Card.Section>
+                  <h2>
+                    <TextStyle>Filecoin Foundation</TextStyle>
+                  </h2>
+                </Card.Section>
+                <Card.Section title='Summary'>
+                  <p>View a summary of your online store’s performance.</p>
+                </Card.Section>
 
-        <Content style={{ padding: '50px 50px' }}>
-          <Title style={{ textAlign: 'center' }}>Notaries</Title>
-          <Divider
-            style={{
-              background: 'linear-gradient(145deg,#c65aff,#248dff)',
-              height: '6px',
-              // minWidth: '24px',
-              // width: '24px'
-            }}
-          />
-
-          <NotaryTable props={pageProps} />
-
-          {/* Notary Cards */}
-          {/* <Row
-            className='notary-cards'
-            gutter={16}
-            style={{ rowGap: '20px' }}
-            // justify='center'
-          >
-            {pageProps.notaries
-              .filter((v: Notary) => !!v.name)
-              .map((notary: Notary, index: any) => (
-                // console.log(notary)
-                // console.log(bytesToSize(notary.initialAllowance)),
-                // console.log(/^https?/i.test(notary.auditTrail)),
-                <NotaryCard
-                  key={index}
-                  name={notary.name}
-                  organization='Organization'
-                  addressId={notary.addressId}
-                  clients={notary.verifiedClientsCount}
-                  datacapAvailable={prettyBytes(Number(notary.allowance), {
-                    binary: true,
-                  })}
-                  // datacapAllocated={bytesToSize(Number((Number(notary.initialAllowance)-Number(notary.allowance))))}
-                  datacapAllocated={prettyBytes(
-                    Number(notary.initialAllowance) - notary.allowance,
-                    { binary: true }
-                  )}
-                  url={/^https?/i.test(notary.auditTrail) && notary.auditTrail}
-                />
-              ))}
-          </Row> */}
-        </Content>
-
-        <CustomLayoutFooter />
-      </Layout>
-    </div>
+                <Card.Section title='Reports'>
+                  <p>View a summary of your online store’s performance.</p>
+                </Card.Section>
+              </Card>
+            </Layout.Section>
+            {/* </Stack> */}
+          </Layout>
+        </Page>
+      </Frame>
+    </>
   );
 };
 

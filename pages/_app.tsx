@@ -1,5 +1,6 @@
-// import 'antd/dist/antd.css';
-// import '../styles/variables.less';
+import '@shopify/polaris/build/esm/styles.css';
+import enTranslations from '@shopify/polaris/locales/en.json';
+import { AppProvider } from '@shopify/polaris';
 import {
   ApolloProvider,
   ApolloClient,
@@ -7,6 +8,7 @@ import {
   HttpLink,
 } from '@apollo/client';
 import type { AppProps } from 'next/app';
+// import Link from 'next/link';
 
 function createApolloClient() {
   const link = new HttpLink({
@@ -24,7 +26,12 @@ function createApolloClient() {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={createApolloClient()}>
-      <Component {...pageProps} />
+      <AppProvider
+        // linkComponent={Link as any}
+        i18n={enTranslations}
+      >
+        <Component {...pageProps} />
+      </AppProvider>
     </ApolloProvider>
   );
 }
