@@ -1,5 +1,3 @@
-// import 'antd/dist/antd.css';
-// import '../styles/variables.less';
 import {
   ApolloProvider,
   ApolloClient,
@@ -7,6 +5,14 @@ import {
   HttpLink,
 } from '@apollo/client';
 import type { AppProps } from 'next/app';
+import {
+  createDOMRenderer,
+  RendererProvider,
+  SSRProvider,
+  FluentProvider,
+  teamsLightTheme,
+  webLightTheme,
+} from '@fluentui/react-components';
 
 function createApolloClient() {
   const link = new HttpLink({
@@ -21,11 +27,18 @@ function createApolloClient() {
   });
 }
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, renderer }) {
   return (
-    <ApolloProvider client={createApolloClient()}>
-      <Component {...pageProps} />
-    </ApolloProvider>
+    // 👇 accepts a renderer from <Document /> or creates a default one
+    <RendererProvider renderer={renderer || createDOMRenderer()}>
+      <SSRProvider>
+        <ApolloProvider client={createApolloClient()}>
+          <FluentProvider theme={webLightTheme}>
+            <Component {...pageProps} />
+          </FluentProvider>
+        </ApolloProvider>
+      </SSRProvider>
+    </RendererProvider>
   );
 }
 
