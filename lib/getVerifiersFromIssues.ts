@@ -53,10 +53,8 @@ export const getVerifierFromIssue = async (issue: any = undefined, options?: { n
   address = newAddress || (address && address[1]);
   address = trimAndClean(address);
 
-  const addressId =
-    (isAddressId(address) && address) || (isAddressKey(address) && (await getAddressIdFromKey(address)));
-  const addressKey =
-    (isAddressKey(address) && address) || (isAddressId(address) && (await getAddressKeyFromId(address)));
+  const addressId = isAddressId(address) && address; // || (isAddressKey(address) && (await getAddressIdFromKey(address)));
+  const addressKey = isAddressKey(address) && address; // || (isAddressId(address) && (await getAddressKeyFromId(address)));
   const name = getName(bodyParsed) && trimAndClean(getName(bodyParsed)[1]);
   // if (issue.number === 460) console.log('bodyParsed(460) ->', bodyParsed);
   // if (issue.number === 460) console.log('getName(bodyParsed)(460) ->', getName(bodyParsed));
