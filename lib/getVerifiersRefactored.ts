@@ -189,8 +189,8 @@ export const getVerifiersWithTemporaryEnrichment = async () => {
       const verifiedClients = await verifier.getVerifiedClients(notary.addressId);
       const verifiedClientsData = verifiedClients?.data || [];
       // console.log('verifiedClientsData.length ->', verifiedClientsData.length);
-      const addressId = notary.addressId || null; // || (notary.address && (await getAddressIdFromKey(notary.address))) || null;
-      const addressKey = notary.address || null; // || (notary.addressId && (await getAddressKeyFromId(notary.addressId))) || null;
+      const addressId = notary.addressId || (notary.address && (await getAddressIdFromKey(notary.address))) || null;
+      const addressKey = notary.address || (notary.addressId && (await getAddressKeyFromId(notary.addressId))) || null;
 
       const removeInvalidTimestamps = (verifier: any) =>
         verifier
