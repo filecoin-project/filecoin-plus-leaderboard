@@ -320,6 +320,11 @@
     pluralize "^8.0.0"
     semver "^7.3.5"
 
+"@newrelic/next@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@newrelic/next/-/next-0.1.1.tgz#17f900b8f0fa144e641cca83ddc9f08f4e26300d"
+  integrity sha512-QUPSeya+FRMiik8zBh7FWW60cfHUFytf+bQccx1g8opKYgRQg4NhXemJ0+79sdBMJQ9qSsOYLff/x7hgzr8SSA==
+
 "@next/env@12.1.5":
   version "12.1.5"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-12.1.5.tgz#a21ba6708022d630402ca2b340316e69a0296dfc"

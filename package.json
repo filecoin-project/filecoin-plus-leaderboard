@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_OPTIONS='--require @newrelic/next' next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
     "@apollo/rover": "^0.5.1",
     "@glif/filecoin-address": "^2.0.0-beta.3",
     "@neo4j/graphql": "^3.1.0",
+    "@newrelic/next": "^0.1.1",
     "@octokit/graphql": "^4.8.0",
     "@octokit/graphql-schema": "^10.73.0",
     "@types/graphql": "^14.5.0",
